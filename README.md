@@ -1,39 +1,94 @@
-# Chirpy Starter
+# DIger's Blog
 
-[![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)][gem]&nbsp;
-[![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
+[![Jekyll](https://img.shields.io/badge/Jekyll-4.4-CC0000?logo=jekyll&logoColor=white)](https://jekyllrb.com/)
+[![Chirpy](https://img.shields.io/badge/Theme-Chirpy-159957)](https://github.com/cotes2020/jekyll-theme-chirpy)
+[![GitHub Pages](https://img.shields.io/badge/Deployed%20on-GitHub%20Pages-222222?logo=github)](https://pages.github.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A minimal, ready-to-use template for creating a blog with the [**Chirpy**][chirpy] Jekyll theme. Get up and running in minutes with all critical files pre-configured.
+👋 欢迎来到 **DIger's Blog** —— 一个使用 [Jekyll](https://jekyllrb.com/) + [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) 主题搭建、托管在 [GitHub Pages](https://pages.github.com/) 上的个人博客。
 
-## Why This Starter Exists
+🌐 在线访问：<https://fewftybet.github.io/>
 
-When installing Chirpy through [RubyGems.org][gem], Jekyll can only read a subset of theme files (`_data`, `_layouts`, `_includes`, `_sass`, `assets`) and limited `_config.yml` options from the gem. As a result, users cannot enjoy the full out-of-the-box experience that Chirpy offers.
+## ✨ 特性
 
-To unlock all features, the following files must be present in your Jekyll site:
+- 🎨 **Chirpy 主题**：响应式、支持深色 / 浅色切换、PWA 可安装
+- 🔍 **全文搜索**、📑 目录、🏷 标签、📂 分类、🗓 归档
+- 💬 内置评论系统支持（giscus / utterances / disqus）
+- 🚀 **GitHub Actions 自动部署**：push 到 `main` 即触发，约 1 分钟上线
+- 📝 Markdown / MathJax / Mermaid / 代码高亮 / 图片懒加载
 
-```shell
+## 🛠 技术栈
+
+| 组件 | 版本 |
+|------|------|
+| Jekyll | 4.4 |
+| jekyll-theme-chirpy | 7.6 |
+| Ruby | 3.2+ (本地) / 3.4 (CI) |
+| 部署 | GitHub Actions → GitHub Pages |
+
+## 📂 目录结构
+
+```text
 .
-├── _config.yml
-├── _plugins
-├── _tabs
-└── index.html
+├── _config.yml          # 站点配置
+├── _data/               # 站点数据（导航、友链等）
+├── _includes/           # 公共组件
+├── _layouts/            # 模板
+├── _posts/              # 博客文章（YYYY-MM-DD-title.md）
+├── _tabs/               # 顶部导航页（Home/About/...）
+├── _plugins/            # 自定义 Liquid 插件
+├── assets/              # 静态资源（含 submodule: chirpy-static-assets）
+└── .github/workflows/   # GitHub Actions 配置
 ```
 
-This starter bundles those files from the latest **Chirpy** release along with a [CD][CD] workflow, so you can start writing immediately.
+## ✍️ 写一篇新文章
 
-## Usage
+在 `_posts/` 下新建 Markdown 文件，命名格式 `YYYY-MM-DD-title.md`：
 
-Check out the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki).
+```markdown
+---
+title: 我的第一篇文章
+date: 2026-07-10 12:00:00 +0800
+categories: [Tech, Notes]
+tags: [jekyll, chirpy]
+description: 这是一段描述，会出现在摘要和 SEO meta 中。
+---
 
-## Contributing
+正文内容...
+```
 
-This repository is automatically updated with new releases from the theme repository. If you encounter any issues or want to contribute to its improvement, please visit the [theme repository][chirpy] to provide feedback.
+写完后：
 
-## License
+```bash
+git add -A
+git commit -m "post: 我的第一篇文章"
+git push origin main
+```
 
-This work is published under [MIT][mit] License.
+约 1 分钟后访问 <https://fewftybet.github.io/> 即可看到。
 
-[gem]: https://rubygems.org/gems/jekyll-theme-chirpy
-[chirpy]: https://github.com/cotes2020/jekyll-theme-chirpy/
-[CD]: https://en.wikipedia.org/wiki/Continuous_deployment
-[mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE
+## 🖥 本地预览
+
+需要先安装 [Ruby 3.2+ with DevKit](https://rubyinstaller.org/)。
+
+```bash
+bundle install
+bundle exec jekyll serve
+```
+
+打开 <http://127.0.0.1:4000/> 即可预览。
+
+## 🙏 致谢
+
+- 主题：[cotes2020/jekyll-theme-chirpy](https://github.com/cotes2020/jekyll-theme-chirpy)
+- 静态资源：[cotes2020/chirpy-static-assets](https://github.com/cotes2020/chirpy-static-assets)
+- 引擎：[Jekyll](https://jekyllrb.com/)
+
+## 📬 联系
+
+- Email: 1565118064@qq.com
+- GitHub: [@fewftybet](https://github.com/fewftybet)
+
+## 📄 License
+
+本博客内容采用 [MIT](LICENSE) 协议发布，文章内容版权归作者所有。
