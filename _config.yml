@@ -162,6 +162,18 @@ paginate: 10
 # The base URL of your site
 baseurl: ""
 
+plugins:
+  - jekyll-archives
+
+jekyll-archives:
+  enabled: [categories, tags]
+  layouts:
+    category: category
+    tag: tag
+  permalinks:
+    tag: /tags/:name/
+    category: /categories/:name/
+
 # ------------ The following options are not recommended to be modified ------------------
 
 kramdown:
@@ -226,11 +238,4 @@ exclude:
   - "*.config.js"
   - "package*.json"
 
-jekyll-archives:
-  enabled: [categories, tags]
-  layouts:
-    category: category
-    tag: tag
-  permalinks:
-    tag: /tags/:name/
-    category: /categories/:name/
+
