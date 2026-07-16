@@ -1,7 +1,7 @@
 ---
 title: 长城杯半决赛 Writeup
 date: 2026-07-13 18:40:00 +0800
-categories: [比赛wp]
+categories: [打靶记录]
 tags: [CTF, 长城杯, 内网渗透]
 media_subpath: /assets/image/great-wall-cup-semifinal/
 ---
