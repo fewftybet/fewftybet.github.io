@@ -4,50 +4,31 @@ layout: default
 
 {% include lang.html %}
 
-{% assign filtered_posts = site.posts | where_exp: 'post', 'post.categories contains page.category' %}
+{% assign column_name = page.column %}
+{% assign filtered_posts = site.posts | where_exp: 'post', 'post.categories[0] == page.parent_category' | where_exp: 'post', 'post.categories[1] == column_name' | sort: 'date' %}
 
-{% assign sub_categories = '' | split: '' %}
-{% for post in filtered_posts %}
-  {% assign sub_cat = post.categories[1] %}
-  {% if sub_cat %}
-    {% unless sub_categories contains sub_cat %}
-      {% assign sub_categories = sub_categories | push: sub_cat %}
-    {% endunless %}
-  {% endif %}
-{% endfor %}
-{% assign sub_categories = sub_categories | sort %}
-
-{% if sub_categories.size > 0 %}
 <div class="row mb-4">
   <div class="col-12">
-    <h5 class="text-muted mb-3"><i class="fas fa-columns me-2"></i>专栏</h5>
-    <div class="row g-3">
-      {% for sub_cat in sub_categories %}
-        {% assign column_page = site.columns | where: 'column', sub_cat | first %}
-        <div class="col-md-6 col-lg-4">
-          <a href="{{ column_page.url | relative_url }}" class="text-decoration-none">
-            <div class="card h-100 column-card">
-              <div class="card-body">
-                <div class="d-flex align-items-center mb-2">
-                  <i class="{{ column_page.icon | default: 'fas fa-folder' }} fa-lg me-2 text-primary"></i>
-                  <h5 class="card-title mb-0">{{ column_page.title | default: sub_cat }}</h5>
-                </div>
-                <p class="card-text small text-muted">{{ column_page.description | default: sub_cat }}</p>
-                <span class="badge bg-secondary">
-                  <i class="far fa-file-alt me-1"></i>
-                  {% assign col_posts = filtered_posts | where_exp: 'p', 'p.categories[1] == sub_cat' %}
-                  {{ col_posts.size }} / {{ column_page.article_count | default: '?' }} 篇
-                </span>
-              </div>
-            </div>
-          </a>
+    <div class="column-header card bg-transparent border-0">
+      <div class="d-flex align-items-center mb-3">
+        <i class="{{ page.icon | default: 'fas fa-folder-open' }} fa-2x me-3 text-primary"></i>
+        <div>
+          <h1 class="mb-0">{{ page.title }}</h1>
+          <p class="text-muted mb-0">{{ page.description }}</p>
         </div>
-      {% endfor %}
+      </div>
+      <div class="d-flex align-items-center">
+        <span class="badge bg-secondary me-2">
+          <i class="far fa-file-alt me-1"></i>
+          共 {{ filtered_posts.size }} / {{ page.article_count | default: 5 }} 篇
+        </span>
+        <a href="{{ '/jing-yan-fen-xiang/' | relative_url }}" class="btn btn-sm btn-outline-secondary">
+          <i class="fas fa-arrow-left me-1"></i>返回经验分享
+        </a>
+      </div>
     </div>
   </div>
 </div>
-<hr class="mb-4">
-{% endif %}
 
 <div id="post-list" class="flex-grow-1 px-xl-1">
   {% for post in filtered_posts %}
@@ -97,10 +78,13 @@ layout: default
 
         <div class="col-md-{{ card_body_col }}">
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">{{ post.title }}</h1>
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge bg-primary me-2">第 {{ forloop.index }} 篇</span>
+              <h1 class="card-title my-2 mt-md-0 mb-0">{{ post.title }}</h1>
+            </div>
 
             <div class="card-text content mt-0 mb-3">
-              <p>{% include post-summary.html %}</p>
+              <p>{{ post.description | default: post.excerpt | strip_html | truncate: 200 }}</p>
             </div>
 
             <div class="post-meta flex-grow-1 d-flex align-items-end">
@@ -108,11 +92,11 @@ layout: default
                 <i class="far fa-calendar fa-fw me-1"></i>
                 {% include datetime.html date=post.date lang=lang %}
 
-                {% if post.categories.size > 0 %}
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    {% for category in post.categories %}
-                      {{ category }}
+                {% if post.tags.size > 0 %}
+                  <i class="fas fa-tags fa-fw me-1"></i>
+                  <span class="tags">
+                    {% for tag in post.tags %}
+                      {{ tag }}
                       {%- unless forloop.last -%},{%- endunless -%}
                     {% endfor %}
                   </span>
@@ -135,6 +119,6 @@ layout: default
 
 {% if filtered_posts.size == 0 %}
   <div class="text-center text-muted mt-5">
-    <p>暂无内容</p>
+    <p>专栏文章即将发布，敬请期待...</p>
   </div>
 {% endif %}
