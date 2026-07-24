@@ -1,14 +1,14 @@
 ---
 title: Web中间件安全基线与加固指南（安服视角）
 date: 2026-07-23 09:00:00 +0800
-categories: [经验分享]
+categories: [经验分享, 安全基线与加固]
 tags: [安全加固, Web中间件, Nginx, Tomcat, Apache, IIS, Redis, RabbitMQ]
 description: 从安服视角出发，系统梳理Nginx、Tomcat、Apache、IIS、Redis、RabbitMQ等常见Web中间件的安全基线与加固方案，涵盖配置规范、访问控制、日志审计等核心维度。
 ---
 
 # Web中间件安全基线与加固指南（安服视角）
 
-## (五) 中间件部署规范
+## 中间件部署规范
 
 ### 0x01 Nginx安全部署规范
 
@@ -708,11 +708,3 @@ rabbitmq-plugins disable rabbitmq_management
   - 限制访问IP（通过防火墙）
   - 修改默认端口（15672）
   - 使用强密码
-
----
-
-> 文章原文：https://mp.weixin.qq.com/s/nq08ysPiyAfgF6EmE1t2LA
->
-> **获取资料地址：**凌绝信安
->
-> **后台回复**：1014  获取系统基线检查安全配置
