@@ -22,8 +22,14 @@ layout: default
           <i class="far fa-file-alt me-1"></i>
           共 {{ filtered_posts.size }} / {{ page.article_count | default: 5 }} 篇
         </span>
-        <a href="{{ '/jing-yan-fen-xiang/' | relative_url }}" class="btn btn-sm btn-outline-secondary">
-          <i class="fas fa-arrow-left me-1"></i>返回经验分享
+        {% assign parent_tab = site.tabs | where: 'category', page.parent_category | first %}
+        {% if parent_tab %}
+          {% assign parent_url = parent_tab.url %}
+        {% else %}
+          {% assign parent_url = '/' | relative_url %}
+        {% endif %}
+        <a href="{{ parent_url | relative_url }}" class="btn btn-sm btn-outline-secondary">
+          <i class="fas fa-arrow-left me-1"></i>返回{{ page.parent_category }}
         </a>
       </div>
     </div>

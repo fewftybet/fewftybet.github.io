@@ -1006,6 +1006,18 @@
   background-color: #434c5e;
 }
 
+/* Fix Rouge .err red background for misidentified tokens */
+.highlight .err {
+  color: inherit !important;
+  background-color: transparent !important;
+}
+
+/* Fix Rouge .err red background for misidentified tokens */
+.highlight .err {
+  color: inherit !important;
+  background-color: transparent !important;
+}
+
 /* Column cards */
 .column-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
